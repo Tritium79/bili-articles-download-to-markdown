@@ -113,18 +113,44 @@ if __name__ == "__main__":
     # 调用html_to_word.py转换为Word
     print("正在将HTML转换为Word...")
     output_word_file = title+'.docx'
+    
+    # 首先尝试使用html2docx库进行转换，因为它能更好地处理HTML格式
+    print("正在使用html2docx库转换HTML为Word...")
     word_result = subprocess.run(
-        ['python', 'html_to_word.py', minified_html_file, '-o', output_word_file],
+        ['python', 'convert_html_to_word.py'],
         capture_output=True,
         text=True
     )
     
-    print(f"html_to_word.py stdout: {word_result.stdout}")
-    print(f"html_to_word.py stderr: {word_result.stderr}")
+    print(f"convert_html_to_word.py stdout: {word_result.stdout}")
+    print(f"convert_html_to_word.py stderr: {word_result.stderr}")
     
     if word_result.returncode != 0:
-        print(f"转换为Word失败: {word_result.stderr}")
-        exit(1)
+        print(f"html2docx转换失败，尝试使用传统方法: {word_result.stderr}")
+        # 如果html2docx转换失败，回退到传统的转换方法
+        word_result = subprocess.run(
+            ['python', 'html_to_word.py', minified_html_file, '-o', output_word_file],
+            capture_output=True,
+            text=True
+        )
+        
+        print(f"html_to_word.py stdout: {word_result.stdout}")
+        print(f"html_to_word.py stderr: {word_result.stderr}")
+        
+        if word_result.returncode != 0:
+            print(f"转换为Word失败: {word_result.stderr}")
+            exit(1)
+    else:
+        print("使用html2docx库转换成功！")
+        # 重命名生成的临时文件为期望的输出文件名
+        import shutil
+        temp_output = "temp_formatted_bilibili_html2docx.docx"
+        if os.path.exists(temp_output):
+            # 如果目标文件已存在，先删除
+            if os.path.exists(output_word_file):
+                os.remove(output_word_file)
+            shutil.move(temp_output, output_word_file)
+            print(f"已将临时文件重命名为: {output_word_file}")
     
     print(f"处理完成！Word文档已保存为: {output_word_file}")
     print("=" * 50)

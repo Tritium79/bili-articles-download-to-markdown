@@ -2,10 +2,10 @@ import argparse
 import os
 import re
 import requests
-import docx
 from bs4 import BeautifulSoup
 from docx import Document
 from docx.shared import Inches
+import docx
 
 
 def download_image(url, save_dir):
@@ -182,27 +182,6 @@ def html_to_word(input_file, output_file):
                     # 这里只是设置了视觉效果，实际超链接功能需要使用hyperlink
                     # 但python-docx不直接支持，需要使用更复杂的方法
                     print(f"添加超链接: {link_text} -> {link_url}")
-            elif element.name == 'strong':
-                # 处理粗体标签 - 特别处理看起来像标题的粗体文本
-                # 检查是否具有特定的CSS类（如font-size-20），这通常表示章节标题
-                css_class = element.get('class', [])
-                text = element.get_text(strip=True)
-                
-                if text and ('font-size-20' in css_class or 'font-size-23' in css_class):
-                    # 这种格式的通常是小标题，添加为三级标题
-                    import re
-                    text = re.sub(r'\s+', ' ', text)
-                    heading = doc.add_heading(text, level=2)  # 二级或三级标题
-                    print(f"添加粗体标题: {text[:30]}...")
-                else:
-                    # 普通的粗体文本，添加到当前段落
-                    if not doc.paragraphs or doc.paragraphs[-1].text.strip():
-                        para = doc.add_paragraph()
-                    else:
-                        para = doc.paragraphs[-1]
-                    run = para.add_run(text)
-                    run.bold = True
-                    print(f"添加粗体文本: {text[:30]}...")
             elif element.name == 'img':
                 # 处理图片 - 优先检查data-src（懒加载），然后是src
                 img_url = element.get('data-src') or element.get('src')
@@ -289,7 +268,7 @@ if __name__ == "__main__":
         title = "output"
         if soup.title:
             title = soup.title.string.strip()
-            # 移除非法文件名字符
+            # 秿除非法文件名字符
             title = re.sub(r'[\\/:*?"<>|]', '_', title)
         output_file = f"{title}.docx"
         print(f"使用网页标题作为输出文件名: {output_file}")

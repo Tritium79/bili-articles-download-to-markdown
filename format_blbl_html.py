@@ -21,9 +21,13 @@ def format_blbl_html(input_file, output_file):
         # 解析HTML
         soup = BeautifulSoup(html_content, 'html.parser')
         
-        # 查找特定元素
-        # 对应document.querySelector("#app > div.opus-detail > div.bili-opus-view > div.opus-module-content")
-        target_element = soup.select_one('#app > div.opus-detail > div.bili-opus-view > div.opus-module-content')
+        # 查找特定元素 - 尝试多种可能的选择器
+        # 针对B站专栏文章（read）类型
+        target_element = soup.select_one('#article-content')
+        
+        if not target_element:
+            # 针对B站Opus类型
+            target_element = soup.select_one('#app > div.opus-detail > div.bili-opus-view > div.opus-module-content')
         
         if not target_element:
             print("未找到目标元素")

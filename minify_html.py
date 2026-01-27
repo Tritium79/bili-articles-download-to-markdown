@@ -34,17 +34,24 @@ def minify_html(input_file, output_file):
                 # 替换整个div结构为简化的img标签
                 pic_div.replace_with(new_img)
 
-        # 递归处理所有标签
+        # 递归处理所有标签，但要小心处理代码块
         for tag in soup.find_all(True):
-            # 删除所有以data-v-开头的属性
-            attrs_to_remove = [attr for attr in tag.attrs if attr.startswith('data-v-')]
-            for attr in attrs_to_remove:
-                del tag.attrs[attr]
+            # 保留代码块相关标签的特定属性，以维持格式
+            if tag.name in ['pre', 'code']:
+                # 对于代码块，保留重要的格式化属性
+                attrs_to_remove = [attr for attr in tag.attrs if attr.startswith('data-v-') and attr not in ['data-type']]
+                for attr in attrs_to_remove:
+                    del tag.attrs[attr]
+            else:
+                # 删除所有以data-v-开头的属性
+                attrs_to_remove = [attr for attr in tag.attrs if attr.startswith('data-v-')]
+                for attr in attrs_to_remove:
+                    del tag.attrs[attr]
 
-            # 可以在这里添加更多的简化规则
-            # 例如：删除style属性
-            if 'style' in tag.attrs:
-                del tag.attrs['style']
+                # 可以在这里添加更多的简化规则
+                # 例如：删除style属性，但保留pre和code标签的style（如果有的话）
+                if 'style' in tag.attrs and tag.name not in ['pre', 'code']:
+                    del tag.attrs['style']
 
         # 获取简化后的HTML内容
         minified_html = soup.prettify()
