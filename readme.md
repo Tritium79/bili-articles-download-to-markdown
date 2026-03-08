@@ -1,4 +1,4 @@
-# B站专栏转Markdown工具 (Bili-Read-Getter to MD)
+# B站专栏转Markdown工具
 
 ## 项目变更说明
 
