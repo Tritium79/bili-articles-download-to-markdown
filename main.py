@@ -78,3 +78,7 @@ if __name__ == "__main__":
         print("识别为单篇转换模式...")
         process_single_url(target)
         print("转换完成！")
+        
+import shutil
+if os.path.exists("__pycache__"):
+    shutil.rmtree("__pycache__")
