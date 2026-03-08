@@ -1,4 +1,3 @@
 requests
 beautifulsoup4
-python-docx
-html2docx
+html2text
