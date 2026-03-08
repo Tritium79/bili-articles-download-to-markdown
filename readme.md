@@ -33,28 +33,62 @@
 
 ## 安装说明
 
-1. 克隆或下载本项目到本地。
-2. 安装 Python 3.6+ 环境。
-3. 安装依赖包：
-```bash
-pip install -r requirements.txt
+### 1. 获取项目
+
+克隆或下载本项目到本地：
+
+Bash
 
 ```
+git clone https://github.com/Tritium79/bili-read-getter.git
+```
 
+### 2. 环境配置
+
+- **Windows 用户**:
+    
+    PowerShell
+    
+    ```
+    # 创建虚拟环境
+    python -m venv venv
+    # 激活虚拟环境
+    .\venv\Scripts\activate
+    ```
+    
+- **macOS / Linux 用户**:
+    
+    Bash
+    
+    ```
+    # 创建虚拟环境
+    python3 -m venv venv
+    # 激活虚拟环境
+    source venv/bin/activate
+    ```
+    
+
+### 3. 安装依赖
+
+Bash
+
+```
+pip install -r requirements.txt
+```
 
 
 ## 使用方法
 
 1. **转换单篇文章**：
 ```bash
-python main.py [B站专栏URL]
+python main.py B站专栏URL
 
 ```
 
 
 2. **批量转换用户全部文章**：
 ```bash
-python main.py [用户UID]
+python main.py 用户UID
 
 ```
 
