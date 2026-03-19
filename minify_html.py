@@ -27,8 +27,14 @@ def minify_html(input_file, output_file):
             # 找到图片标签
             img_tag = pic_div.find('img', class_='b-img__inner')
             if img_tag:
-                # 保留src属性，删除其他属性
+                # 获取原始src属性
                 src = img_tag.get('src')
+                
+                # --- 修改部分：补全协议头以适配 Obsidian ---
+                if src and src.startswith('//'):
+                    src = 'https:' + src
+                # ----------------------------------------
+
                 new_img = soup.new_tag('img')
                 new_img['src'] = src
                 # 替换整个div结构为简化的img标签
